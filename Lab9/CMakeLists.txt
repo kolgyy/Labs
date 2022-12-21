@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15) # Проверка версии CMake.
 								# старее указаной, произайдёт аварийный выход.
 
 		 
-project(practice2)			 # имя проекта	
+project(lab9)			 # имя проекта	
 
 
 set(CMAKE_CXX_STANDARD 17)			 # устанавливаем 17 стандарт языка
@@ -12,5 +12,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 include_directories(inc)			 # указываем, где искать файлы заголовков
 
-add_executable(practice2 main.cpp ) #добавить исполняемый файл
+add_executable(lab9 main.cpp ) #добавить исполняемый файл
 								 
