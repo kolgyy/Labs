@@ -13,8 +13,6 @@
 
 #include <iostream>
 
-#define DEBUG 1
-
 class IntVector {
 private:
     int* m_arr; // Указатель на динамически выделенную память
@@ -41,16 +39,6 @@ private:
         delete[] m_arr;
 
         m_arr = newArr;
-
-#if DEBUG
-        std::cout
-            << "capacity reallocated, new capacity: "
-            << m_capacity
-            << ", "
-            << "current size: "
-            << m_size
-            << std::endl;
-#endif
     }
 public:
     // Конструктор, принимающий вместимость, по умолчанию 8
@@ -63,10 +51,6 @@ public:
     // Деструктор, который освобождает память
     ~IntVector() {
         delete[] m_arr;
-
-#if DEBUG
-        std::cout << "destructor called";
-#endif
     }
 
     // Метод, который добавляет элемент в конец
