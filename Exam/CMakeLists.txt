@@ -22,8 +22,7 @@ add_executable("${PROJECT_NAME}" main.cpp
 		
 	inc/Header.hpp src/Source.cpp)
 
-file(COPY "assets" DESTINATION "/")
-											
+						
 target_link_libraries("${PROJECT_NAME}" sfml-graphics-s
 						  sfml-window-s
 						  sfml-system-s
@@ -38,4 +37,5 @@ target_link_libraries("${PROJECT_NAME}" sfml-graphics-s
 						  vorbisfile
 						  vorbis
 						  ogg)
-
+file(COPY "assets" DESTINATION "/")
+					
