@@ -5,7 +5,7 @@ using std::cin;
 using std::endl;
 using std::ostream;
 
-int strLEN(char* str) { // Handmade strlen
+int strLEN(const char* str) { // Handmade strlen
     int counter = 0;
     while (str[counter] != '\0')
         counter++;
@@ -21,7 +21,7 @@ public:
         str = nullptr;
         length = 0;
     }
-    MyString(char* str) {
+    MyString(const char* str) {
         length = strLEN(str);
         this->str = new char[length + 1]; // Add ONE 'cause of a non-printing null '\0'
         for (int i = 0; i < length; i++) {
