@@ -185,7 +185,6 @@ public:
             throw std::out_of_range("the length was exceeded");
         return this->str[index];
         
-
     }
 
 
@@ -199,7 +198,8 @@ public:
 
     }
 
-
+    friend std::ostream& operator << (std::ostream& os, MyString& str);
+    friend std::istream& operator >> (std::istream& in, MyString& str);
 
 private:
     char* str;
