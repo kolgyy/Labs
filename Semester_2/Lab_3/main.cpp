@@ -23,8 +23,12 @@ public:
 
 	}
 	~Complex() {
-		delete this->real_number;
-		delete this->imaginary_unit;
+		if (real_number != nullptr) {
+			delete real_number;
+		}
+		if (imaginary_unit != nullptr) {
+			delete imaginary_unit;
+		}
 
 	}
 	Complex& operator= (const Complex& other) {
@@ -80,11 +84,11 @@ public:
 		*this->real_number += 1;
 		return *this;
 	}
-	Complex& operator++(int) { // Postfix increment
+	Complex operator++(int) { // Postfix increment
 
 		Complex temp(*this);
 
-		++(*this->real_number);
+		++(*real_number);
 
 		return temp;
 
@@ -125,6 +129,7 @@ int main() {
 	cout << "The sum of numbers: " << (number_1 + number_2) << endl;
 	cout << "The multiply of numbers: " << (number_1 * number_2) << endl;
 	cout << "The 1s_number + 1: " << ++number_1 << endl;
+	cout << "The 2s_number + 1: " << number_2++ << endl;
 	number_1 = number_2;
 	cout << number_1 << endl;
 

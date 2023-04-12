@@ -3,6 +3,18 @@ using std::endl;
 using std::cout;
 using std::cin;
 
+void* memcpy(void* destination, const void* source, size_t num) {
+
+	int* dest = (int*)destination;
+	int* src = (int*)source;
+	for (size_t i = 0; i < num; ++i) {
+		dest[i] = src[i];
+	}
+	return destination;
+}
+
+// void* - указатель на неопределенный тип данных, чтобы функция могла работать с блоками памяти разных типов данных
+// size_t определяет размер области памяти
 
 int main() {
 
@@ -16,20 +28,20 @@ int mas_b[N] = { 0 };
 for (int i = 0; i < N; ++i) {
 	cout << mas_b[i] << " ";
 }
-
 cout << endl << endl;
 
-int* ptr_mas_a = mas_a;
-int* ptr_mas_b = mas_b;
-int* ptr_end = ptr_mas_a + N;
+// Подход копирования правильный, но в случае с большими массивами скорость увеличится, хоть и линейно.
+// Для улучшения можно использовать другие алгоритмы, например, memcpy().
+// Она копирует один блок памяти в другой, она является внутренней функцией, поэтому код может быть быстро скомпилирован в машинный код.
+// Напишем её
 
-for (; ptr_mas_a != ptr_end; ++ptr_mas_a, ++ptr_mas_b)
-	*ptr_mas_b = *ptr_mas_a;
+
+
+memcpy(mas_b, mas_a, N);
 
 for (int i = 0; i < N; ++i) {
 	cout << mas_b[i] << " ";
 }
-
 
 return 0;
 }
