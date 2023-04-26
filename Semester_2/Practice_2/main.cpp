@@ -19,8 +19,8 @@ void* memcpy(void* destination, const void* source, size_t num) {
 int main() {
 
 const int N = 1000;
-int mas_a[N] = { 1,2,3,4,5 };
-int mas_b[N] = { 0 };
+int mas_a[N] = { 1,2,3,4,5, 5, 0, 5, 5, 5 , 5, 5 , 5 };
+int mas_b[N] = { 0, 5, 6 };
 
 // for (int i = 0; i < N; ++i)
 //     mas_b[i] = mas_a[i];

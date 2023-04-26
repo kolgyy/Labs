@@ -1,124 +1,132 @@
-#include <iostream>
+﻿#include <iostream>
 #include <vector>
 #include <string>
-#include <sstream>
+#include <sstream> // We need this to split up a string into parts
 #include <algorithm>
+#include <unordered_map>
 
-class FibonacciCipher {
+
+using std::cin;
+using std::cout;
+using std::vector;
+using std::string;
+using std::endl;
+using std::stringstream;
+using std::sort;
+using std::unordered_map;
+
+
+
+bool is_fibonacci_sequence(const string& key_string) {
+	vector<int> numbers;
+	stringstream ss(key_string);
+	int temp;
+	while (ss >> temp)
+		numbers.push_back(temp);
+	sort(numbers.begin(), numbers.end());
+	for (int i = 2; i < numbers.size(); i++) {
+		if (numbers[i] != (numbers[i - 1] + numbers[i - 2]))
+			return false;
+	}
+	return true;
+}
+
+
+class Fibonacci_Cipher {
 public:
-    FibonacciCipher() {}
+	Fibonacci_Cipher() {
 
-    void SetKey(const std::vector<int>& key) {
-        key_ = key;
-    }
+	}
+	void set_key(const string& key_string) {
 
-    std::vector<int> GetKey() const {
-        return key_;
-    }
+		if (split_message(key_string).size() > 30 || split_message(key_string).size() < 3)
+			throw std::invalid_argument("The key size was exceeded!");
 
-    std::string Encode(const std::string& message) const {
-        std::vector<std::string> words = SplitMessageIntoWords(message);
-        std::vector<int> word_numbers = ConvertWordsToNumbers(words);
-        std::vector<int> encoded_word_numbers = EncodeNumbers(word_numbers);
-        std::vector<std::string> encoded_words = ConvertNumbersToWords(encoded_word_numbers);
-        return JoinWordsIntoMessage(encoded_words);
-    }
+		else if (is_fibonacci_sequence(key_string)) {
+			stringstream ss(key_string);
+			int fib_num = 0;
+			while (ss >> fib_num)
+				key.push_back(fib_num);
+		}
+		else {
+			throw std::invalid_argument("The key is incorrect!");
+		}
+	}
+	vector<int> get_key() {
+		return key;
+	}
+	void print_key() {
+		for (int i = 0; i < key.size(); i++)
+			cout << key[i] << " ";
+	}
+	string encode(const string& message) {
+		vector<string> encoded_words = split_message(message);
+		if (encoded_words.size() > 30 || encoded_words.size() < 3 || encoded_words.size() != key.size())
+			throw std::invalid_argument("The message size was exceeded!");
+		vector<int> original_key = key;
+		sort(key.begin(), key.end());
+		unordered_map<int, string> map;
+		for (int i = 0; i < key.size(); i++) 
+			map[key[i]] = encoded_words[i];
+		this->map = map;
+		string cipher;
+		for (int i = 0; i < key.size(); i++) {
+			cipher += map[original_key[i]];
+				if (i < key.size() - 1)
+					cipher += " ";
+		}
 
-    std::string Decode(const std::string& message) const {
-        std::vector<std::string> words = SplitMessageIntoWords(message);
-        std::vector<int> word_numbers = ConvertWordsToNumbers(words);
-        std::vector<int> decoded_word_numbers = DecodeNumbers(word_numbers);
-        std::vector<std::string> decoded_words = ConvertNumbersToWords(decoded_word_numbers);
-        return JoinWordsIntoMessage(decoded_words);
-    }
+		return cipher;
+	}
+	string decode(const string& key) {
+		vector<int> sorted_key;
+		stringstream ss(key);
+		int temp;
+		while (ss >> temp)
+			sorted_key.push_back(temp);
+		if (sorted_key.size() > 30 || sorted_key.size() < 3)
+			throw std::invalid_argument("The key size was exceeded!");
+		string decoded_message;
+		for (int i = 0; i < sorted_key.size(); i++){
+			decoded_message += map[sorted_key[i]];
+			if (i < sorted_key.size() - 1)
+				decoded_message += " ";
+		}
+		
+		return decoded_message;
+	}
+
+
+
+
+
 
 private:
-    std::vector<int> key_;
+	vector<int> key;
+	unordered_map <int, string> map;
 
-    std::vector<std::string> SplitMessageIntoWords(const std::string& message) const {
-        std::vector<std::string> words;
-        std::stringstream ss(message);
-        std::string word;
-        while (ss >> word) {
-            words.push_back(word);
-        }
-        return words;
-    }
-
-    std::vector<int> ConvertWordsToNumbers(const std::vector<std::string>& words) const {
-        std::vector<int> numbers;
-        for (const auto& word : words) {
-            int number = 0;
-            for (const auto& c : word) {
-                number = number * 256 + c;
-            }
-            numbers.push_back(number);
-        }
-        return numbers;
-    }
-
-    std::vector<std::string> ConvertNumbersToWords(const std::vector<int>& numbers) const {
-        std::vector<std::string> words;
-        for (const auto& number : numbers) {
-            std::string word;
-            int temp_number = number;
-            while (temp_number > 0) {
-                word.push_back(temp_number % 256);
-                temp_number /= 256;
-            }
-            std::reverse(word.begin(), word.end());
-            words.push_back(word);
-        }
-        return words;
-    }
-
-    std::vector<int> EncodeNumbers(const std::vector<int>& numbers) const {
-        std::vector<int> encoded_numbers;
-        for (const auto& index : key_) {
-            if (index - 1 < numbers.size()) {
-                encoded_numbers.push_back(numbers[index - 1]);
-            }
-        }
-        return encoded_numbers;
-    }
-
-    std::vector<int> DecodeNumbers(const std::vector<int>& numbers) const {
-        std::vector<int> decoded_numbers(numbers.size(), 0);
-        int i = 0;
-        for (const auto& index : key_) {
-            if (i < numbers.size()) {
-                decoded_numbers[index - 1] = numbers[i];
-            }
-            i++;
-        }
-        return decoded_numbers;
-    }
-
-    std::string JoinWordsIntoMessage(const std::vector<std::string>& words) const {
-        std::string message;
-        for (const auto& word : words) {
-            message += word;
-            message.push_back(' ');
-        }
-        if (!message.empty()) {
-            message.pop_back();
-        }
-        return message;
-    }
+	vector<string> split_message(const string& message) {
+		vector<string> words;
+		stringstream ss(message); // Split the message up into words
+		string word;
+		while (ss >> word)
+			words.push_back(word);
+		return words;
+	}
 };
 
-int main() {
-    FibonacciCipher cipher;
-    std::vector<int> key = { 2, 8, 5, 1, 3 };
-    cipher.SetKey(key);
+int main()
+{
 
-    std::string message = "Hello, my name is Ivan.";
-    std::string encoded_message = cipher.Encode(message);
-    std::string decoded_message = cipher.Decode(encoded_message);
+	Fibonacci_Cipher message;
+	message.set_key("2 8 5 1 3");
+	// message.set_key("2 8 5 1 3 5");  // It's gonna be an ERROR!
+	message.print_key();
+	cout << endl;
+	string expression = "Hello, my name is Ivan.";
+	// string expression = "Hello, my name is Ivan Ivanovich."; It's gonna be an ERROR!
+	cout << message.encode(expression) << endl;
+	cout << message.decode("1 2 3 5 8");
 
-    std::cout << "Original message: " << message << std::endl;
-    std::cout << "Encoded message: " << encoded_message << std::endl;
-    std::cout << "Decoded message: " << decoded_message << std::endl;
-
-    return 0;
+	return 0;
 }

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15) # Проверка версии CMake.
 									
-set(PROJECT_NAME matrices)				 # имя проекта		 
+set(PROJECT_NAME geometric_shapes)				 # имя проекта		 
 project("${PROJECT_NAME}")
 
 
