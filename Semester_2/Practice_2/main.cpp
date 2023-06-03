@@ -1,46 +1,54 @@
 #include <iostream>
+#include <chrono>
 using std::endl;
 using std::cout;
 using std::cin;
 
-void* memcpy(void* destination, const void* source, size_t num) {
+int main(){
 
-	int* dest = (int*)destination;
-	int* src = (int*)source;
-	for (size_t i = 0; i < num; ++i) {
-		dest[i] = src[i];
+	const int N = 10000;
+	int mas_a[N] = { 1, 2, 4, 5, 7 };
+	int mas_b[N] = { 0 };
+
+	auto begin = std::chrono::steady_clock::now();
+	for (int i = 0; i < N; ++i) {
+		mas_b[i] = mas_a[i];
 	}
-	return destination;
-}
-// void* - указатель на неопределенный тип данных, чтобы функция могла работать с блоками памяти разных типов данных
-// size_t определяет размер области памяти
+	auto end = std::chrono::steady_clock::now();
+	auto elapsed_ms = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
+	cout << "The first algorithm took : " << elapsed_ms.count() << endl;
+	////////////////////////////////////////////////
 
-int main() {
+	int num_1[N] = { 1, 2, 4, 5, 7 };
+	int num_2[N] = { 0 };
 
-const int N = 1000;
-int mas_a[N] = { 1,2,3,4,5, 5, 0, 5, 5, 5 , 5, 5 , 5 };
-int mas_b[N] = { 0, 5, 6 };
+	auto begin1 = std::chrono::steady_clock::now();
 
-// for (int i = 0; i < N; ++i)
-//     mas_b[i] = mas_a[i];
+	const long long* ptr1 = (const long long*)num_1; // Берём указатель на массив, указатель занимает теперь в памяти 8 байт вместо 4.
 
-for (int i = 0; i < N; ++i) {
-	cout << mas_b[i] << " ";
-}
-cout << endl << endl;
+	long long* ptr2 = (long long*)num_2;
 
-// Подход копирования правильный, но в случае с большими массивами скорость увеличится, хоть и линейно.
-// Для улучшения можно использовать другие алгоритмы, например, memcpy().
-// Она копирует один блок памяти в другой, она является внутренней функцией, поэтому код может быть быстро скомпилирован в машинный код.
-// ↑ Напишем её ↑
+	int number_of_iterations = (sizeof(int) * N) / sizeof(long long); // Кол-во лонг лонгов, помещающихся в объем памяти, занимаемый интовым массивом
+
+	for (int i = 0; i < number_of_iterations; ++i) {
+		*(ptr2++) = *(ptr1++); // Получаем в два раза прирост копирования, так как копируем по 8 байт вместо 4
+	}
+
+	const char* other_types_ptr1 = (char*)ptr1; 
+
+	char* other_types_ptr2 = (char*)ptr2;
+
+	int other_iterations = (sizeof(int) * N) % sizeof(long long);
+
+	for (int i = 0; i < other_iterations; ++i) { // Копируем остатки
+		*(other_types_ptr2++) = *(other_types_ptr1++);
+	}
+	auto end1 = std::chrono::steady_clock::now();
+
+	auto elapsed_ms1 = std::chrono::duration_cast<std::chrono::microseconds>(end1 - begin1); // В среднем второй алгоритм получается в два раза эффективнее.
+	cout << "The second algorithm took : " << elapsed_ms1.count() << endl;
 
 
-
-memcpy(mas_b, mas_a, N);
-
-for (int i = 0; i < N; ++i) {
-	cout << mas_b[i] << " ";
-}
 
 return 0;
 }

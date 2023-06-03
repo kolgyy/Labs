@@ -13,4 +13,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 add_executable("${PROJECT_NAME}" main.cpp
 		
 )
-											
+
+file(COPY "configuration" DESTINATION "/")										
