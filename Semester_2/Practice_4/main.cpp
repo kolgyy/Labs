@@ -17,17 +17,17 @@ public:
 	virtual void poll() = 0; // Abstract class
 };
 
-class Electric_Meter : public Device { // "Реализация" получения данных с электросчетчика.
+class Electric_Meter : public Device { // "Р РµР°Р»РёР·Р°С†РёСЏ" РїРѕР»СѓС‡РµРЅРёСЏ РґР°РЅРЅС‹С… СЃ СЌР»РµРєС‚СЂРѕСЃС‡РµС‚С‡РёРєР°.
 	void poll() override {
 		cout << "Electic meter has been polled" << endl; 
 	}
 };
-class Discrete_Signal_Input : public Device { // "Реализация" получения данных с блока вводов дискретных сигналов.
+class Discrete_Signal_Input : public Device { // "Р РµР°Р»РёР·Р°С†РёСЏ" РїРѕР»СѓС‡РµРЅРёСЏ РґР°РЅРЅС‹С… СЃ Р±Р»РѕРєР° РІРІРѕРґРѕРІ РґРёСЃРєСЂРµС‚РЅС‹С… СЃРёРіРЅР°Р»РѕРІ.
 	void poll() override {
 		cout << "Discrete signal input has been polled" << endl;
 	}
 };
-class Heating_Control : public Device { // "Реализация" получения данных с блоков управления отоплением.
+class Heating_Control : public Device { // "Р РµР°Р»РёР·Р°С†РёСЏ" РїРѕР»СѓС‡РµРЅРёСЏ РґР°РЅРЅС‹С… СЃ Р±Р»РѕРєРѕРІ СѓРїСЂР°РІР»РµРЅРёСЏ РѕС‚РѕРїР»РµРЅРёРµРј.
 	void poll() override {
 		cout << "Heating control has been polled" << endl;
 	}
