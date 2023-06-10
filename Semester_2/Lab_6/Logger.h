@@ -15,15 +15,15 @@ enum class LogLevel {
 
 class Logger {
 public:
-	Logger(std::string filename, LogLevel level = LogLevel::Info); // Конструктор принимает имя файла и уровень логирования
-	~Logger(); // Закрытие файла
-	void setLogLevel(LogLevel level); // Изменение уровня логирования
-	void log(std::string message, LogLevel level = LogLevel::Info); // Запись в консоль и файл
+	Logger(std::string filename, LogLevel level = LogLevel::Info); // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїСЂРёРЅРёРјР°РµС‚ РёРјСЏ С„Р°Р№Р»Р° Рё СѓСЂРѕРІРµРЅСЊ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ
+	~Logger(); // Р—Р°РєСЂС‹С‚РёРµ С„Р°Р№Р»Р°
+	void setLogLevel(LogLevel level); // РР·РјРµРЅРµРЅРёРµ СѓСЂРѕРІРЅСЏ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ
+	void log(std::string message, LogLevel level = LogLevel::Info); // Р—Р°РїРёСЃСЊ РІ РєРѕРЅСЃРѕР»СЊ Рё С„Р°Р№Р»
 
 private:
-	LogLevel m_logLevel; // Уровень логирования
+	LogLevel m_logLevel; // РЈСЂРѕРІРµРЅСЊ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ
 
-	std::ofstream m_fileStream; // Поток для записи в файл
+	std::ofstream m_fileStream; // РџРѕС‚РѕРє РґР»СЏ Р·Р°РїРёСЃРё РІ С„Р°Р№Р»
 
 	std::string getLogLevelString(LogLevel level);
 };
