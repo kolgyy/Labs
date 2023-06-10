@@ -10,7 +10,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 
 
-add_executable("${PROJECT_NAME}" main.cpp
+add_executable("${PROJECT_NAME}" main.cpp Logger.h Logger.cpp)
 		
-)
 											

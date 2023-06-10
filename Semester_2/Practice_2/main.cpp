@@ -47,7 +47,30 @@ int main(){
 
 	auto elapsed_ms1 = std::chrono::duration_cast<std::chrono::microseconds>(end1 - begin1); // В среднем второй алгоритм получается в два раза эффективнее.
 	cout << "The second algorithm took : " << elapsed_ms1.count() << endl;
+	//////////
 
+	/*std::string str1 = "Hello, world!";
+	std::string str2(str1.size(), ' ');
+
+	const long long* ptr1 = (const long long*)str1.data();
+	long long* ptr2 = (long long*)str2.data();
+
+	int number_of_iterations = (sizeof(char) * str1.size()) / sizeof(long long);
+
+	for (int i = 0; i < number_of_iterations; ++i) {
+		*(ptr2++) = *(ptr1++);
+	}
+
+	const char* other_types_ptr1 = (char*)ptr1;
+	char* other_types_ptr2 = (char*)ptr2;
+
+	int other_iterations = (sizeof(char) * str1.size()) % sizeof(long long);
+
+	for (int i = 0; i < other_iterations; ++i) {
+		*(other_types_ptr2++) = *(other_types_ptr1++);
+	}
+	cout << str2 << endl;
+	*/
 
 
 return 0;
