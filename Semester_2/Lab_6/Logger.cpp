@@ -2,42 +2,42 @@
 #include <iomanip> 
 
 logging::Logger::Logger(std::string filename, LogLevel level) {
-	m_logLevel = level; // Óñòàíîâêà óðîâíÿ ëîãèðîâàíèÿ
-	m_fileStream.open(filename.c_str(), std::ios::out | std::ios::app); // Îòêðûòèå ôàéëà äëÿ çàïèñè
+	m_logLevel = level; // Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° ÑƒÑ€Ð¾Ð²Ð½Ñ Ð»Ð¾Ð³Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ
+	m_fileStream.open(filename.c_str(), std::ios::out | std::ios::app); // ÐžÑ‚ÐºÑ€Ñ‹Ñ‚Ð¸Ðµ Ñ„Ð°Ð¹Ð»Ð° Ð´Ð»Ñ Ð·Ð°Ð¿Ð¸ÑÐ¸
 }
 
 logging::Logger::~Logger() {
-	m_fileStream.close(); // Çàêðûòèå ôàéëà
+	m_fileStream.close(); // Ð—Ð°ÐºÑ€Ñ‹Ñ‚Ð¸Ðµ Ñ„Ð°Ð¹Ð»Ð°
 }
 
-void logging :: Logger::setLogLevel(LogLevel level) { // Ìåòîä èçìåíåíèå óðîâíÿ ëîãèðîâàíèÿ
+void logging :: Logger::setLogLevel(LogLevel level) { // ÐœÐµÑ‚Ð¾Ð´ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ ÑƒÑ€Ð¾Ð²Ð½Ñ Ð»Ð¾Ð³Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ
 	m_logLevel = level;
 }
 
 void logging :: Logger::log(std::string message, LogLevel level) {
-	if (level >= m_logLevel) { // Íóæíî ëè çàïèñûâàòü ñîîáùåíèå â ëîã
+	if (level >= m_logLevel) { // ÐÑƒÐ¶Ð½Ð¾ Ð»Ð¸ Ð·Ð°Ð¿Ð¸ÑÑ‹Ð²Ð°Ñ‚ÑŒ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ Ð² Ð»Ð¾Ð³
 		std::time_t t = std::time(nullptr);
 		std::tm tm = *std::localtime(&t);
 
-		std::string logLevelString = getLogLevelString(level); // Ïîëó÷åíèå ñòðîêè äëÿ óðîâíÿ ëîãèðîâàíèÿ
-		std::time_t now = std::time(nullptr); // Ïîëó÷åíèå òåêóùåãî âðåìåíè â ñåêóíäàõ
-		std::tm tm_ = *std::localtime(&now); // Ïðåîáðàçîâàíèå òåêóùåãî âðåìåíè â ñòðóêòóðó std::tm
-		char buffer[100]; // Ñîçäàíèå áóôåðà äëÿ õðàíåíèÿ îòôîðìàòèðîâàííîé äàòû è âðåìåíè
-		std::strftime(buffer, 100, "%d.%m.%Y %H:%M:%S", &tm); // Ôîðìàòèðîâàíèå äàòû è âðåìåíè è çàïèñü â áóôåð
-		std::string timestamp(buffer); // Ïðåîáðàçîâàíèå îòôîðìàòèðîâàííîé äàòû è âðåìåíè â string
-		std::string logMessage = "[" + timestamp + "] " + "[" + logLevelString + "] " + message; // Ôîðìèðîâàíèå ñîîáùåíèÿ ëîãà
+		std::string logLevelString = getLogLevelString(level); // ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ ÑÑ‚Ñ€Ð¾ÐºÐ¸ Ð´Ð»Ñ ÑƒÑ€Ð¾Ð²Ð½Ñ Ð»Ð¾Ð³Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ
+		std::time_t now = std::time(nullptr); // ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ³Ð¾ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Ð² ÑÐµÐºÑƒÐ½Ð´Ð°Ñ…
+		std::tm tm_ = *std::localtime(&now); // ÐŸÑ€ÐµÐ¾Ð±Ñ€Ð°Ð·Ð¾Ð²Ð°Ð½Ð¸Ðµ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ³Ð¾ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Ð² ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñƒ std::tm
+		char buffer[100]; // Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¸Ðµ Ð±ÑƒÑ„ÐµÑ€Ð° Ð´Ð»Ñ Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ñ Ð¾Ñ‚Ñ„Ð¾Ñ€Ð¼Ð°Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð¾Ð¹ Ð´Ð°Ñ‚Ñ‹ Ð¸ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸
+		std::strftime(buffer, 100, "%d.%m.%Y %H:%M:%S", &tm); // Ð¤Ð¾Ñ€Ð¼Ð°Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð´Ð°Ñ‚Ñ‹ Ð¸ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Ð¸ Ð·Ð°Ð¿Ð¸ÑÑŒ Ð² Ð±ÑƒÑ„ÐµÑ€
+		std::string timestamp(buffer); // ÐŸÑ€ÐµÐ¾Ð±Ñ€Ð°Ð·Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð¾Ñ‚Ñ„Ð¾Ñ€Ð¼Ð°Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð¾Ð¹ Ð´Ð°Ñ‚Ñ‹ Ð¸ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Ð² string
+		std::string logMessage = "[" + timestamp + "] " + "[" + logLevelString + "] " + message; // Ð¤Ð¾Ñ€Ð¼Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ Ð»Ð¾Ð³Ð°
 		if (level >= LogLevel::Error) {
 			std::cerr << logMessage << std::endl;
 		}
 		else {
 			std::cout << logMessage << std::endl;
 		}
-		m_fileStream << logMessage << std::endl; // Çàïèñü ñîîáùåíèÿ â ôàéë
+		m_fileStream << logMessage << std::endl; // Ð—Ð°Ð¿Ð¸ÑÑŒ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ Ð² Ñ„Ð°Ð¹Ð»
 
 	}
 }
 
-std::string logging:: Logger::getLogLevelString(LogLevel level) { // Ìåòîä äëÿ ïîëó÷åíèÿ ñòðîêè, ñîîòâåñòâóþùåé óðîâíþ ëîãèðîâàíèÿ
+std::string logging:: Logger::getLogLevelString(LogLevel level) { // ÐœÐµÑ‚Ð¾Ð´ Ð´Ð»Ñ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ñ ÑÑ‚Ñ€Ð¾ÐºÐ¸, ÑÐ¾Ð¾Ñ‚Ð²ÐµÑÑ‚Ð²ÑƒÑŽÑ‰ÐµÐ¹ ÑƒÑ€Ð¾Ð²Ð½ÑŽ Ð»Ð¾Ð³Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ
 	switch (level) {
 	case LogLevel::Debug:
 		return "\033[0;34m" + std::string("DEBUG") + "\033[0m";
