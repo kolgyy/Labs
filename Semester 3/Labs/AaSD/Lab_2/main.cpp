@@ -1,8 +1,9 @@
-#include <iostream>
-#include <stack>
-#include <string>
-#include <cmath>
-/// Reverse Polish Notation, RPN ///
+
+#include <iostream> 
+#include <stack> 
+#include <string> 
+#include <cmath> 
+/// Reverse Polish Notation, RPN /// 
 using std::cout;
 using std::endl;
 using std::cin;
@@ -58,6 +59,10 @@ double evaluateExpression(const string& expression) {
 
             operands.push(stod(operand));
         }
+        else if (expression[i] == '(' && expression[i+1] == '-') {
+            operators.push(expression[i]);
+            operators.push(expression[i + 1]);
+        }
         else if (expression[i] == '(') {
             operators.push(expression[i]);
         }
@@ -107,12 +112,16 @@ double evaluateExpression(const string& expression) {
 }
 
 int main() {
+    string equation_1 = "(1+2*(3+4*(3-2*(4-2))))=";
+    string equation_2 = "((-28+34*2*5)*5*(-10)-1)=";
+    string equation_3 = "(8-5*(4/2))=";
+    string equation_4 = "1+(9*((4*7/(-2))*(-1)))=";
     string expression;
-    cout << "Enter the mathematical expression: ";
-    cin >> expression;
+    // cout << "Enter the mathematical expression: "; 
+    // cin >> expression; 
 
     try {
-        double result = evaluateExpression(expression);
+        double result = evaluateExpression(equation_4);
         cout << "Result: " << result << endl;
     }
     catch (const char* error) {
