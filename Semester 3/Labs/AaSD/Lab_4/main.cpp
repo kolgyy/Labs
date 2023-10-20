@@ -26,24 +26,24 @@ int main() {
 
 	setlocale(LC_ALL, "Russian");
 	int size;
-	cout << "Ââåäèòå ðàçìåð ìàññèâà: " << endl;
+	cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ñ€Ð°Ð·Ð¼ÐµÑ€ Ð¼Ð°ÑÑÐ¸Ð²Ð°: " << endl;
 	cin >> size;
 	
 	int* arr = new int [size];
 	
-	cout << "Ââåäèòå ýëåìåíòû ìàññèâà: " << endl;
+	cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ñ‹ Ð¼Ð°ÑÑÐ¸Ð²Ð°: " << endl;
 	for (int i = 0; i < size; i++) {
 		cin >> arr[i];
 	}
 
 	Bubblesort(arr, size);
 
-	cout << "Îòñîðòèðîâàííûé ìàññèâ: " << endl;
+	cout << "ÐžÑ‚ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ð¹ Ð¼Ð°ÑÑÐ¸Ð²: " << endl;
 	for (int i = 0; i < size; i++) {
 		cout << arr[i] << " ";
 	}
 
-	delete[] arr; // Íå çàáûâàåì îò÷èñòèòü ïàìÿòü!
+	delete[] arr; // ÐÐµ Ð·Ð°Ð±Ñ‹Ð²Ð°ÐµÐ¼ Ð¾Ñ‚Ñ‡Ð¸ÑÑ‚Ð¸Ñ‚ÑŒ Ð¿Ð°Ð¼ÑÑ‚ÑŒ!
 
 	return 0;
 }
