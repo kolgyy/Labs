@@ -1,37 +1,51 @@
 #include <iostream>
 
-using std::cout;
 using std::cin;
+using std::cout;
 using std::endl;
 
+void heapify(int arr[], int n, int i) {
+    int largest = i;
+    int l = 2 * i + 1;
+    int r = 2 * i + 2;
 
+    if (l < n && arr[l] > arr[largest]) {
+        largest = l;
+    }
 
-void Shell_sort(int arr[], int size) { 
-	for (int step = size / 2; step > 0; step /= 2) { // Ќачинаем с большего шага, затем уменьшаем его, цикл продолжаетс€ до тех пор, пока gap больше 0
-		// Ќа каждой итерации мы уменьшаем gap в два раза.
-		for (int i = step; i < size; i++) { // ѕримен€ем сортировку вставками
-			for (int j = i - step; j >= 0 && arr[j] > arr[j + step]; j -= step) { // —равниваем два элемента, которые наход€тс€ на рассто€нии step
-				int temp = arr[j];
-				arr[j] = arr[j + step];
-				arr[j + step] = temp;
-			}
-		}
+    if (r < n && arr[r] > arr[largest]) {
+        largest = r;
+    }
 
-	}
-	
+    if (largest != i) {
+        std::swap(arr[i], arr[largest]);
+        heapify(arr, n, largest);
+    }
 }
+
+void heap_sort(int arr[], int n) {
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapify(arr, n, i);
+    }
+
+    for (int i = n - 1; i > 0; i--) {
+        std::swap(arr[0], arr[i]);
+        heapify(arr, i, 0);
+    }
+}
+
 int main() {
-	int arr[] = { 5, 9, 4, 3, 1, 2 }; // 
-	int size = sizeof(arr) / sizeof(arr[0]); // ƒлина = размер всего массива в байтах / размер первого элемента в байтах
+    int arr[] = { 12, 11, 13, 5, 6, 7, 0, 122 };
+    int n = sizeof(arr) / sizeof(arr[0]);
 
-	Shell_sort(arr, size);
+    heap_sort(arr, n);
 
-	cout << "Sorted array: " << endl;
-	for (int i = 0; i < size; i++) {
-		cout << arr[i] << " ";
-	}
+    cout << "Sorted array: ";
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
 
-
-
-	return 0;
+    return 0;
 }
+
