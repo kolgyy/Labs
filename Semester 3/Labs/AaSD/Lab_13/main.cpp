@@ -3,10 +3,10 @@
 #include <string>
 using namespace std;
 
-const int TABLE_SIZE = 10; // Размер хеш-таблицы
-const string OUTPUT_FILE = "output.txt"; // Имя результирующего файла
+const int TABLE_SIZE = 10; // Р Р°Р·РјРµСЂ С…РµС€-С‚Р°Р±Р»РёС†С‹
+const string OUTPUT_FILE = "output.txt"; // РРјСЏ СЂРµР·СѓР»СЊС‚РёСЂСѓСЋС‰РµРіРѕ С„Р°Р№Р»Р°
 
-// Хеш-функция для строки
+// РҐРµС€-С„СѓРЅРєС†РёСЏ РґР»СЏ СЃС‚СЂРѕРєРё
 int hashFunction(const string& key) {
     int hash = 0;
     for (char c : key) {
@@ -15,7 +15,7 @@ int hashFunction(const string& key) {
     return hash % TABLE_SIZE;
 }
 
-// Структура для хранения элемента в хеш-таблице
+// РЎС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ С…СЂР°РЅРµРЅРёСЏ СЌР»РµРјРµРЅС‚Р° РІ С…РµС€-С‚Р°Р±Р»РёС†Рµ
 struct HashNode {
     string key;
     HashNode* next;
@@ -23,7 +23,7 @@ struct HashNode {
     HashNode(const string& k) : key(k), next(nullptr) {}
 };
 
-// Класс для хеш-таблицы
+// РљР»Р°СЃСЃ РґР»СЏ С…РµС€-С‚Р°Р±Р»РёС†С‹
 class HashTable {
 private:
     HashNode* table[TABLE_SIZE];
@@ -35,7 +35,7 @@ public:
         }
     }
 
-    // Метод для добавления элемента в хеш-таблицу
+    // РњРµС‚РѕРґ РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ СЌР»РµРјРµРЅС‚Р° РІ С…РµС€-С‚Р°Р±Р»РёС†Сѓ
     void insert(const string& key) {
         int index = hashFunction(key);
 
@@ -52,13 +52,13 @@ public:
         }
     }
 
-    // Метод для вывода хеш-таблицы в файл
+    // РњРµС‚РѕРґ РґР»СЏ РІС‹РІРѕРґР° С…РµС€-С‚Р°Р±Р»РёС†С‹ РІ С„Р°Р№Р»
     void printToFile(const string& filename) {
         ofstream outputFile(filename);
         if (outputFile.is_open()) {
             for (int i = 0; i < TABLE_SIZE; i++) {
                 HashNode* curr = table[i];
-                if (curr != nullptr) { // Проверка наличия значений
+                if (curr != nullptr) { // РџСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ Р·РЅР°С‡РµРЅРёР№
                     outputFile << i << " ";
                     while (curr != nullptr) {
                         outputFile << curr->key << " ";
@@ -70,7 +70,7 @@ public:
             outputFile.close();
         }
         else {
-            cout << "Ошибка при открытии файла!" << endl;
+            cout << "РћС€РёР±РєР° РїСЂРё РѕС‚РєСЂС‹С‚РёРё С„Р°Р№Р»Р°!" << endl;
         }
     }
 };
@@ -87,7 +87,7 @@ int main() {
         hashtable.printToFile(OUTPUT_FILE);
     }
     else {
-        cout << "Ошибка при открытии файла!" << endl;
+        cout << "РћС€РёР±РєР° РїСЂРё РѕС‚РєСЂС‹С‚РёРё С„Р°Р№Р»Р°!" << endl;
     }
 
     return 0;
