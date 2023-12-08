@@ -8,7 +8,7 @@ using std::endl;
 // Quick sort
 
 void quickSort(int a[], int left, int right) {
-	if (left > right) return; // ”ÒÎÓ‚ËÂ ‚˚ıÓ‰‡ ËÁ ÔÓ„‡ÏÏ˚
+	if (left > right) return; // –£—Å–ª–æ–≤–∏–µ –≤—ã—Ö–æ–¥–∞ –∏–∑ –ø—Ä–æ–≥—Ä–∞–º–º—ã
 	int pivot = a[(left + right) / 2];
 	int i = left;
 	int j = right;
@@ -32,14 +32,14 @@ int main() {
 	srand(time(0));
 	const int N = 10;
 	int a[N];
-	cout << "»ÒıÓ‰Ì˚È Ï‡ÒÒË‚: " << endl;
+	cout << "–ò—Å—Ö–æ–¥–Ω—ã–π –º–∞—Å—Å–∏–≤: " << endl;
 	for (int i = 0; i < N; i++) {
-		a[i] = rand() % 16; // ◊ËÒÎ‡ ·Û‰ÛÚ ÓÚ 0 ‰Ó 15 ‚ÍÎ˛˜ËÚÂÎ¸ÌÓ.
+		a[i] = rand() % 16; // –ß–∏—Å–ª–∞ –±—É–¥—É—Ç –æ—Ç 0 –¥–æ 15 –≤–∫–ª—é—á–∏—Ç–µ–ª—å–Ω–æ.
 		cout << a[i] << "\t";
 	}
 	cout << endl;
 	quickSort(a, 0, N - 1);
-	cout << "ŒÚÒÓÚËÓ‚‡ÌÌ˚È Ï‡ÒÒË‚: " << endl;
+	cout << "–û—Ç—Å–æ—Ä—Ç–∏—Ä–æ–≤–∞–Ω–Ω—ã–π –º–∞—Å—Å–∏–≤: " << endl;
 	for (int i = 0; i < N; i++) {
 		cout << a[i] << "\t";
 	}
