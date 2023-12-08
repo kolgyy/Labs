@@ -2,7 +2,7 @@
 
 using namespace std;
 
-// Список
+// РЎРїРёСЃРѕРє
 template <typename T>
 class node
 {
@@ -11,20 +11,20 @@ public:
     T value;
     node* next;
 
-    node(string key, T value) // Конструктор
+    node(string key, T value) // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
     {
         this->key = key;
         this->value = value;
         this->next = NULL;
     }
-    node(node& obj) // Конструктор копирования
+    node(node& obj) // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
     {
         this->key = obj.key;
         this->value = obj.value;
         this->next = NULL;
     }
 
-    ~node() // Деструктор
+    ~node() // Р”РµСЃС‚СЂСѓРєС‚РѕСЂ
     {
         node* head = this;
         while (head != NULL)
@@ -36,15 +36,15 @@ public:
     }
 };
 
-// Хеш-таблица
+// РҐРµС€-С‚Р°Р±Р»РёС†Р°
 template <typename T>
 class unordered_map
 {
 public:
     int numOfElements, capacity;
-    node<T>** arr; // Массив, в котором хранятся указатели на node<T>(заголовок списка)
+    node<T>** arr; // РњР°СЃСЃРёРІ, РІ РєРѕС‚РѕСЂРѕРј С…СЂР°РЅСЏС‚СЃСЏ СѓРєР°Р·Р°С‚РµР»Рё РЅР° node<T>(Р·Р°РіРѕР»РѕРІРѕРє СЃРїРёСЃРєР°)
 
-    unordered_map() // Конструктор
+    unordered_map() // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
     {
         this->capacity = 1;
         this->numOfElements = 0;
@@ -52,14 +52,14 @@ public:
         this->arr[0] = NULL;
     }
 
-    int hashFunction(string key) // Хеш-функция для хеширования строки
+    int hashFunction(string key) // РҐРµС€-С„СѓРЅРєС†РёСЏ РґР»СЏ С…РµС€РёСЂРѕРІР°РЅРёСЏ СЃС‚СЂРѕРєРё
     {
         int bucketIndex;
         long long int sum = 0, factor = 31;
         for (int i = 0; i < key.size(); i++)
         {
-            // sum = sum + (ascii значение символа * (простое число ^ x)) % от общего количества ячеек
-            // factor = factor * простое число, т.е. простое число ^ x
+            // sum = sum + (ascii Р·РЅР°С‡РµРЅРёРµ СЃРёРјРІРѕР»Р° * (РїСЂРѕСЃС‚РѕРµ С‡РёСЃР»Рѕ ^ x)) % РѕС‚ РѕР±С‰РµРіРѕ РєРѕР»РёС‡РµСЃС‚РІР° СЏС‡РµРµРє
+            // factor = factor * РїСЂРѕСЃС‚РѕРµ С‡РёСЃР»Рѕ, С‚.Рµ. РїСЂРѕСЃС‚РѕРµ С‡РёСЃР»Рѕ ^ x
             sum = ((sum % this->capacity) + ((int(key[i])) * factor) % this->capacity) % this->capacity;
             factor = ((factor % INT16_MAX) * (31 % INT16_MAX)) % INT16_MAX;
         }
@@ -70,49 +70,49 @@ public:
 
     float getLoadFactor()
     {
-        // количество элементов в хеш-таблице / общее количество ячеек
+        // РєРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РІ С…РµС€-С‚Р°Р±Р»РёС†Рµ / РѕР±С‰РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ СЏС‡РµРµРє
         return (float)(this->numOfElements + 1) / (float)(this->capacity);
     }
 
     void rehashing()
     {
         int oldCapacity = this->capacity;
-        node<T>** temp = this->arr; // temp содержит текущий массив
+        node<T>** temp = this->arr; // temp СЃРѕРґРµСЂР¶РёС‚ С‚РµРєСѓС‰РёР№ РјР°СЃСЃРёРІ
 
-        this->capacity = oldCapacity * 2; // удвоение размера текущей емкости
-        this->arr = new node<T> *[this->capacity]; // указывает на новый массив удвоенного размера
+        this->capacity = oldCapacity * 2; // СѓРґРІРѕРµРЅРёРµ СЂР°Р·РјРµСЂР° С‚РµРєСѓС‰РµР№ РµРјРєРѕСЃС‚Рё
+        this->arr = new node<T> *[this->capacity]; // СѓРєР°Р·С‹РІР°РµС‚ РЅР° РЅРѕРІС‹Р№ РјР°СЃСЃРёРІ СѓРґРІРѕРµРЅРЅРѕРіРѕ СЂР°Р·РјРµСЂР°
 
         for (int i = 0; i < this->capacity; i++)
         {
             arr[i] = NULL;
         }
-        for (int i = 0; i < oldCapacity; i++) // копирование всех предыдущих значений в новый массив
+        for (int i = 0; i < oldCapacity; i++) // РєРѕРїРёСЂРѕРІР°РЅРёРµ РІСЃРµС… РїСЂРµРґС‹РґСѓС‰РёС… Р·РЅР°С‡РµРЅРёР№ РІ РЅРѕРІС‹Р№ РјР°СЃСЃРёРІ
         {
             node<T>* currBucketHead = temp[i];
-            while (currBucketHead != NULL) // копирование всего списка
+            while (currBucketHead != NULL) // РєРѕРїРёСЂРѕРІР°РЅРёРµ РІСЃРµРіРѕ СЃРїРёСЃРєР°
             {
-                this->insert(currBucketHead->key, currBucketHead->value); // функция вставки теперь обновила хэш-функцию, так как емкость удвоилась
+                this->insert(currBucketHead->key, currBucketHead->value); // С„СѓРЅРєС†РёСЏ РІСЃС‚Р°РІРєРё С‚РµРїРµСЂСЊ РѕР±РЅРѕРІРёР»Р° С…СЌС€-С„СѓРЅРєС†РёСЋ, С‚Р°Рє РєР°Рє РµРјРєРѕСЃС‚СЊ СѓРґРІРѕРёР»Р°СЃСЊ
                 currBucketHead = currBucketHead->next;
             }
         }
-        delete[] temp; // удаление старого массива из кучи памяти
+        delete[] temp; // СѓРґР°Р»РµРЅРёРµ СЃС‚Р°СЂРѕРіРѕ РјР°СЃСЃРёРІР° РёР· РєСѓС‡Рё РїР°РјСЏС‚Рё
         return;
     }
 
     void insert(string key, T value)
     {
-        while (this->getLoadFactor() > 0.5f) // при коэффициенте нагрузки > 0,5
+        while (this->getLoadFactor() > 0.5f) // РїСЂРё РєРѕСЌС„С„РёС†РёРµРЅС‚Рµ РЅР°РіСЂСѓР·РєРё > 0,5
         {
             this->rehashing();
         }
 
         int bucketIndex = this->hashFunction(key);
-        if (this->arr[bucketIndex] == NULL) // когда в ячейке нет списка
+        if (this->arr[bucketIndex] == NULL) // РєРѕРіРґР° РІ СЏС‡РµР№РєРµ РЅРµС‚ СЃРїРёСЃРєР°
         {
             node<T>* newNode = new node<T>(key, value);
             arr[bucketIndex] = newNode;
         }
-        else // добавление в начало текущего списка
+        else // РґРѕР±Р°РІР»РµРЅРёРµ РІ РЅР°С‡Р°Р»Рѕ С‚РµРєСѓС‰РµРіРѕ СЃРїРёСЃРєР°
         {
             node<T>* newNode = new node<T>(key, value);
             newNode->next = this->arr[bucketIndex];
@@ -123,24 +123,24 @@ public:
 
     int search(string key)
     {
-        int bucketIndex = this->hashFunction(key); // получение индекса ячейки
+        int bucketIndex = this->hashFunction(key); // РїРѕР»СѓС‡РµРЅРёРµ РёРЅРґРµРєСЃР° СЏС‡РµР№РєРё
         node<T>* bucketHead = this->arr[bucketIndex];
-        while (bucketHead != NULL) // поиск в списке, который присутствует в ячейке по заданному ключу
+        while (bucketHead != NULL) // РїРѕРёСЃРє РІ СЃРїРёСЃРєРµ, РєРѕС‚РѕСЂС‹Р№ РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ РІ СЏС‡РµР№РєРµ РїРѕ Р·Р°РґР°РЅРЅРѕРјСѓ РєР»СЋС‡Сѓ
         {
             if (bucketHead->key == key)
             {
                 return bucketHead->value;
             }
-            bucketHead = bucketHead->next; // переход к следующему node в списке
+            bucketHead = bucketHead->next; // РїРµСЂРµС…РѕРґ Рє СЃР»РµРґСѓСЋС‰РµРјСѓ node РІ СЃРїРёСЃРєРµ
         }
-        cout << "!Data not found!" << endl; // когда ключ не подобран
+        cout << "!Data not found!" << endl; // РєРѕРіРґР° РєР»СЋС‡ РЅРµ РїРѕРґРѕР±СЂР°РЅ
         return -1;
     }
 };
 
 int main()
 {
-    unordered_map<int> mp; // int - значение, в нашем случае key типа string
+    unordered_map<int> mp; // int - Р·РЅР°С‡РµРЅРёРµ, РІ РЅР°С€РµРј СЃР»СѓС‡Р°Рµ key С‚РёРїР° string
     mp.insert("Vlad", 111);
     mp.insert("Anton", 14);
     mp.insert("Bogdan", 2);
@@ -155,8 +155,8 @@ int main()
     cout << "Value of Zhenya : " << mp.search("Zhenya") << endl;
     cout << "Value of Artur : " << mp.search("Artur") << endl;
 
-    // выводит Data not found and return -1
-    mp.search("Ivan"); // случай, когда в хеш-таблице отсутствует нужный ключ
+    // РІС‹РІРѕРґРёС‚ Data not found and return -1
+    mp.search("Ivan"); // СЃР»СѓС‡Р°Р№, РєРѕРіРґР° РІ С…РµС€-С‚Р°Р±Р»РёС†Рµ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РЅСѓР¶РЅС‹Р№ РєР»СЋС‡
 
     return 0;
 }
