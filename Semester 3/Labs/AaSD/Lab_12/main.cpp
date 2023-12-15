@@ -6,7 +6,7 @@
 #include <string>
 #include <random>
 
-// Генерируем файл с рандомными числами.
+// Р“РµРЅРµСЂРёСЂСѓРµРј С„Р°Р№Р» СЃ СЂР°РЅРґРѕРјРЅС‹РјРё С‡РёСЃР»Р°РјРё.
 void generateInputFile(const std::string& inputFileName, int totalNumbers) {
     std::ofstream inputFile(inputFileName);
     std::random_device rd;
@@ -17,7 +17,7 @@ void generateInputFile(const std::string& inputFileName, int totalNumbers) {
         inputFile << dis(gen) << " ";
     }
 }
-// Разбиваем файл на чанки (части), помещая их в оперативную память, обрабатывая их.
+// Р Р°Р·Р±РёРІР°РµРј С„Р°Р№Р» РЅР° С‡Р°РЅРєРё (С‡Р°СЃС‚Рё), РїРѕРјРµС‰Р°СЏ РёС… РІ РѕРїРµСЂР°С‚РёРІРЅСѓСЋ РїР°РјСЏС‚СЊ, РѕР±СЂР°Р±Р°С‚С‹РІР°СЏ РёС….
 void splitAndSortChunks(const std::string& inputFileName, int chunkSize) {
     std::ifstream inputFile(inputFileName);
     int chunkNumber = 1;
@@ -42,7 +42,7 @@ void splitAndSortChunks(const std::string& inputFileName, int chunkSize) {
         std::copy(chunk.begin(), chunk.end(), std::ostream_iterator<int>(outputFile, " "));
     }
 }
-// Слияние чанков и их запись в файл.
+// РЎР»РёСЏРЅРёРµ С‡Р°РЅРєРѕРІ Рё РёС… Р·Р°РїРёСЃСЊ РІ С„Р°Р№Р».
 void mergeChunks(const std::string& outputFileName, int chunkSize, int totalChunks) {
     std::vector<std::ifstream> chunkFiles;
     chunkFiles.reserve(totalChunks);
@@ -84,7 +84,7 @@ void mergeChunks(const std::string& outputFileName, int chunkSize, int totalChun
         chunkFile.close();
     }
 }
-// Внешняя многофазная 
+// Р’РЅРµС€РЅСЏСЏ РјРЅРѕРіРѕС„Р°Р·РЅР°СЏ 
 void multiPhaseSort(const std::string& inputFileName, const std::string& outputFileName, int chunkSize) {
     splitAndSortChunks(inputFileName, chunkSize);
 
