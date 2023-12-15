@@ -1,320 +1,214 @@
 #include <iostream>
-#include <string>
 #include <vector>
+#include <string>
 
-// Базовый класс контроллов
-class Control {
+template <class T>
+class IRepository
+{
 public:
-    virtual void setPosition(int x, int y) = 0;
-    virtual std::pair<int, int> getPosition() const = 0;
+
+    virtual void Add(T* item) = 0;
+    virtual void Update(T* item) = 0;
+    virtual void Delete(T* item) = 0;
+    virtual std::vector<T*> Get(const std::string    where, const std::string    orderBy) = 0;
 };
 
-// Контролл Form
-class Form : public Control {
-public:
-    void setPosition(int x, int y) override {
-        std::cout << "Setting position of Form to (" << x << ", " << y << ")" << std::endl;
-        position_ = std::make_pair(x, y);
+enum Gender { Male, Female };
+std::string genderToString(Gender gender) {
+    if (gender == Gender::Male) {
+        return "Male";
     }
-
-    std::pair<int, int> getPosition() const override {
-        return position_;
+    else if (gender == Gender::Female) {
+        return "Female";
     }
-
-    void addControl(Control* control) {
-        controls_.push_back(control);
+    else {
+        return "Other";
     }
-
+}
+class User
+{
 private:
-    std::pair<int, int> position_;
-    std::vector<Control*> controls_;
+
+    int mId;
+    std::string mName;
+    std::string mEmail;
+    std::string mPhone;
+    std::string mCity;
+    Gender mGender;
+public:
+
+    int getId() const { return mId; }
+
+    void setId(int id) { mId = id; }
+
+    std::string getName() const { return mName; }
+
+    void setName(const std::string name) { mName = name; }
+
+    std::string getEmail() const { return mEmail; }
+
+    void setEmail(const std::string email) { mEmail = email; }
+
+    std::string getPhone() const { return mPhone; }
+
+    void setPhone(const std::string phone) { mPhone = phone; }
+
+    std::string getCity() const { return mCity; }
+
+    void setCity(const std::string city) { mCity = city; }
+
+    Gender getGender() const { return mGender; }
+
+    void setGender(Gender Gender) { mGender = Gender; }
 };
 
-// Контролл Label
-class Label : public Control {
+class IUserRepository
+{
 public:
-    void setPosition(int x, int y) override {
-        std::cout << "Setting position of Label to (" << x << ", " << y << ")" << std::endl;
-        position_ = std::make_pair(x, y);
-    }
 
-    std::pair<int, int> getPosition() const override {
-        return position_;
-    }
+    virtual User* getById(int id) = 0;
 
-    void setText(const std::string& text) {
-        std::cout << "Setting text of Label to \"" << text << "\"" << std::endl;
-        text_ = text;
-    }
+    virtual User* getByName(const std::string name) = 0;
 
-    std::string getText() const {
-        return text_;
-    }
+    virtual User* getByEmail(const std::string email) = 0;
 
-private:
-    std::pair<int, int> position_;
-    std::string text_;
+    virtual std::vector<User*> getByCity(const std::string city) = 0;
+
+    virtual std::vector<User*> getByGender(Gender Gender) = 0;
 };
 
-// Контролл TextBox
-class TextBox : public Control {
+template <class T>
+class MemoryRepository : public virtual IRepository<T>
+{
+protected:
+    std::vector<T*> mItems;
 public:
-    void setPosition(int x, int y) override {
-        std::cout << "Setting position of TextBox to (" << x << ", " << y << ")" << std::endl;
-        position_ = std::make_pair(x, y);
+    void Add(T* item) override
+    {
+        mItems.push_back(item);
     }
-
-    std::pair<int, int> getPosition() const override {
-        return position_;
+    void Update(T* item) override
+    {
+        for (int i = 0; i < mItems.size(); i++)
+        {
+            if (mItems[i] == item)
+            {
+                mItems[i] = item;
+                break;
+            }
+        }
     }
-
-    void setText(const std::string& text) {
-        std::cout << "Setting text of TextBox to \"" << text << "\"" << std::endl;
-        text_ = text;
+    void Delete(T* item) override
+    {
+        for (int i = 0; i < mItems.size(); i++)
+        {
+            if (mItems[i] == item)
+            {
+                mItems.erase(mItems.begin() + i);
+                break;
+            }
+        }
     }
-
-    std::string getText() const {
-        return text_;
-    }
-
-    void onValueChanged() {
-        std::cout << "TextBox value has changed" << std::endl;
-    }
-
-private:
-    std::pair<int, int> position_;
-    std::string text_;
-};
-
-// Контролл ComboBox
-class ComboBox : public Control {
-public:
-    void setPosition(int x, int y) override {
-        std::cout << "Setting position of ComboBox to (" << x << ", " << y << ")" << std::endl;
-        position_ = std::make_pair(x, y);
-    }
-
-    std::pair<int, int> getPosition() const override {
-        return position_;
-    }
-
-    void setSelectedIndex(int index) {
-        std::cout << "Setting selected index of ComboBox to " << index << std::endl;
-        selectedIndex_ = index;
-    }
-
-    int getSelectedIndex() const {
-        return selectedIndex_;
-    }
-
-    void setItems(const std::vector<std::string>& items) {
-        std::cout << "Setting items of ComboBox" << std::endl;
-        items_ = items;
-    }
-
-    std::vector<std::string> getItems() const {
-        return items_;
-    }
-
-private:
-    std::pair<int, int> position_;
-    int selectedIndex_;
-    std::vector<std::string> items_;
-};
-
-// Контролл Button
-class Button : public Control {
-public:
-    void setPosition(int x, int y) override {
-        std::cout << "Setting position of Button to (" << x << ", " << y << ")" << std::endl;
-        position_ = std::make_pair(x, y);
-    }
-
-    std::pair<int, int> getPosition() const override {
-        return position_;
-    }
-
-    void setText(const std::string& text) {
-        std::cout << "Setting text of Button to \"" << text << "\"" << std::endl;
-        text_ = text;
-    }
-
-    std::string getText() const {
-        return text_;
-    }
-
-    void click() {
-        std::cout << "Button has been clicked" << std::endl;
-    }
-
-private:
-    std::pair<int, int> position_;
-    std::string text_;
-};
-
-// Абстрактная фабрика контролов
-class ControlFactory {
-public:
-    virtual Form* createForm() = 0;
-    virtual Label* createLabel() = 0;
-    virtual TextBox* createTextBox() = 0;
-    virtual ComboBox* createComboBox() = 0;
-    virtual Button* createButton() = 0;
-};
-
-// Фабрика для Windows
-class WindowsControlFactory : public ControlFactory {
-public:
-    Form* createForm() override {
-        std::cout << "Creating Windows Form" << std::endl;
-        return new Form();
-    }
-
-    Label* createLabel() override {
-        std::cout << "Creating Windows Label" << std::endl;
-        return new Label();
-    }
-
-    TextBox* createTextBox() override {
-        std::cout << "Creating Windows TextBox" << std::endl;
-        return new TextBox();
-    }
-
-    ComboBox* createComboBox() override {
-        std::cout << "Creating Windows ComboBox" << std::endl;
-        return new ComboBox();
-    }
-
-    Button* createButton() override {
-        std::cout << "Creating Windows Button" << std::endl;
-        return new Button();
+    std::vector<T*> Get(const std::string where, const std::string orderBy) override
+    {
+        return mItems;
     }
 };
 
-// Фабрика для Linux
-class LinuxControlFactory : public ControlFactory {
+class MemoryUserRepository : public MemoryRepository<User>, public IUserRepository
+{
 public:
-    Form* createForm() override {
-        std::cout << "Creating Linux Form" << std::endl;
-        return new Form();
+    User* getById(int id) override
+    {
+        for (User* user : mItems)
+        {
+            if (user->getId() == id)
+            {
+                return user;
+            }
+        }
+        return nullptr;
     }
 
-    Label* createLabel() override {
-        std::cout << "Creating Linux Label" << std::endl;
-        return new Label();
+    User* getByName(const std::string name) override
+    {
+        for (User* user : mItems)
+        {
+            if (user->getName() == name)
+            {
+                return user;
+            }
+        }
+        return nullptr;
     }
 
-    TextBox* createTextBox() override {
-        std::cout << "Creating Linux TextBox" << std::endl;
-        return new TextBox();
+    User* getByEmail(const std::string email) override
+    {
+        for (User* user : mItems)
+        {
+            if (user->getEmail() == email)
+            {
+                return user;
+            }
+        }
+        return nullptr;
     }
 
-    ComboBox* createComboBox() override {
-        std::cout << "Creating Linux ComboBox" << std::endl;
-        return new ComboBox();
+    std::vector<User*> getByCity(const std::string city) override
+    {
+        std::vector<User*> result;
+        for (User* user : mItems)
+        {
+            if (user->getCity() == city)
+            {
+                result.push_back(user);
+            }
+        }
+        return result;
     }
-
-    Button* createButton() override {
-        std::cout << "Creating Linux Button" << std::endl;
-        return new Button();
-    }
-};
-
-// Фабрика для MacOS
-class MacOSControlFactory : public ControlFactory {
-public:
-    Form* createForm() override {
-        std::cout << "Creating MacOS Form" << std::endl;
-        return new Form();
-    }
-
-    Label* createLabel() override {
-        std::cout << "Creating MacOS Label" << std::endl;
-        return new Label();
-    }
-
-    TextBox* createTextBox() override {
-        std::cout << "Creating MacOS TextBox" << std::endl;
-        return new TextBox();
-    }
-
-    ComboBox* createComboBox() override {
-        std::cout << "Creating MacOS ComboBox" << std::endl;
-        return new ComboBox();
-    }
-
-    Button* createButton() override {
-        std::cout << "Creating MacOS Button" << std::endl;
-        return new Button();
+    std::vector<User*> getByGender(Gender Gender) override
+    {
+        std::vector<User*> result;
+        for (User* user : mItems)
+        {
+            if (user->getGender() == Gender)
+            {
+                result.push_back(user);
+            }
+        }
+        return result;
     }
 };
 
 int main() {
-    setlocale(LC_ALL, "Russian");
-    // Выбор операционной системы
-    std::string os;
-    std::cout << "Выберите операционную систему (Windows, Linux, MacOS): ";
-    std::cin >> os;
+    MemoryUserRepository repo;
 
-    ControlFactory* factory = nullptr;
 
-    // Создание соответствующей фабрики контролов в зависимости от выбранной ОС
-    if (os == "Windows") {
-        factory = new WindowsControlFactory();
+    User* user1 = new User();
+    user1->setId(101);
+    user1->setName("Maria");
+    user1->setEmail("Maria@gmail.com");
+    user1->setPhone("9583450193");
+    user1->setCity("Saint-Petersburg");
+    user1->setGender(Female);
+
+    User* user2 = new User();
+    user2->setId(102);
+    user2->setName("Anna");
+    user2->setEmail("Anny@gmail.com");
+    user2->setPhone("4952401948");
+    user2->setCity("Moscow");
+    user2->setGender(Female);
+
+    repo.Add(user1);
+    repo.Add(user2);
+
+
+    std::vector<User*> users = repo.Get("", "");
+    std::cout << "All users:" << std::endl;
+    for (User* user : users) {
+        std::cout << user->getId() << " " << user->getName() << " " << user->getEmail() << " " << user->getPhone()
+            << " " << user->getCity() << " " << genderToString(user->getGender()) << "";
+        std::cout << std::endl;
     }
-    else if (os == "Linux") {
-        factory = new LinuxControlFactory();
-    }
-    else if (os == "MacOS") {
-        factory = new MacOSControlFactory();
-    }
-    else {
-        std::cerr << "Неизвестная операционная система!" << std::endl;
-        return 1;
-    }
-
-    // Создание контролов
-    Form* form = factory->createForm();
-    Label* label = factory->createLabel();
-    TextBox* textBox = factory->createTextBox();
-    ComboBox* comboBox = factory->createComboBox();
-    Button* button = factory->createButton();
-
-    // Размещение контролов и выполнение методов
-    form->addControl(label);
-    form->addControl(textBox);
-    form->addControl(comboBox);
-    form->addControl(button);
-
-    label->setPosition(10, 10);
-    textBox->setPosition(10, 50);
-    comboBox->setPosition(10, 90);
-    button->setPosition(10, 130);
-
-    label->setText("Привет, мир!");
-    textBox->setText("Текст в TextBox");
-    comboBox->setSelectedIndex(2);
-    comboBox->setItems({ "Item 1", "Item 2", "Item 3" });
-    button->setText("Нажми меня!");
-
-    std::cout << std::endl;
-    std::cout << "Позиция формы: (" << form->getPosition().first << ", " << form->getPosition().second << ")" << std::endl;
-    std::cout << "Текст на Label: " << label->getText() << std::endl;
-    std::cout << "Текст в TextBox: " << textBox->getText() << std::endl;
-    std::cout << "Выбранный элемент ComboBox : " << comboBox->getSelectedIndex() << std::endl;
-        std::cout << "Элементы ComboBox: ";
-    for (const auto& item : comboBox->getItems()) {
-        std::cout << item << ", ";
-    }
-    std::cout << std::endl;
-
-    // Освобождение памяти
-    delete label;
-    delete textBox;
-    delete comboBox;
-    delete button;
-    delete form;
-    delete factory;
-
-    return 0;
 }
