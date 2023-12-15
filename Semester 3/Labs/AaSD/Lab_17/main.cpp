@@ -130,7 +130,7 @@ int main() {
     std::cout << "Enter Binary Search Tree in linear bracket notation: ";
     std::getline(std::cin, input);
 
-    // Ïàğñèíã ëèíåéíî-ñêîáî÷íîé çàïèñè è âñòàâêà óçëîâ â äåğåâî
+    // ĞŸĞ°Ñ€ÑĞ¸Ğ½Ğ³ Ğ»Ğ¸Ğ½ĞµĞ¹Ğ½Ğ¾-ÑĞºĞ¾Ğ±Ğ¾Ñ‡Ğ½Ğ¾Ğ¹ Ğ·Ğ°Ğ¿Ğ¸ÑĞ¸ Ğ¸ Ğ²ÑÑ‚Ğ°Ğ²ĞºĞ° ÑƒĞ·Ğ»Ğ¾Ğ² Ğ² Ğ´ĞµÑ€ĞµĞ²Ğ¾
     for (char c : input) {
         if (isdigit(c)) {
             int value = c - '0';
