@@ -115,19 +115,19 @@ int main() {
     std::string str = "8(3(1)(6(4)(7)))(10(14)(13))";
     Node* root = treeFromString(str, 0, str.length() - 1);
 
-    std::cout << "Ðåêóðñèâíûé îáõîä(ïðÿìîé): ";
+    std::cout << "Ð ÐµÐºÑƒÑ€ÑÐ¸Ð²Ð½Ñ‹Ð¹ Ð¾Ð±Ñ…Ð¾Ð´(Ð¿Ñ€ÑÐ¼Ð¾Ð¹): ";
     preOrderRecursive(root);
     std::cout << std::endl;
 
-    std::cout << "Ðåêóðñèâíûé îáõîä(öåíòðàëüíûé): ";
+    std::cout << "Ð ÐµÐºÑƒÑ€ÑÐ¸Ð²Ð½Ñ‹Ð¹ Ð¾Ð±Ñ…Ð¾Ð´(Ñ†ÐµÐ½Ñ‚Ñ€Ð°Ð»ÑŒÐ½Ñ‹Ð¹): ";
     inOrderRecursive(root);
     std::cout << std::endl;
 
-    std::cout << "Ðåêóðñèâíûé îáõîä(êîíöåâîé): ";
+    std::cout << "Ð ÐµÐºÑƒÑ€ÑÐ¸Ð²Ð½Ñ‹Ð¹ Ð¾Ð±Ñ…Ð¾Ð´(ÐºÐ¾Ð½Ñ†ÐµÐ²Ð¾Ð¹): ";
     postOrderRecursive(root);
     std::cout << std::endl;
 
-    std::cout << "Íå ðåêóðñèâíûé ïðÿìîé îáõîä: ";
+    std::cout << "ÐÐµ Ñ€ÐµÐºÑƒÑ€ÑÐ¸Ð²Ð½Ñ‹Ð¹ Ð¿Ñ€ÑÐ¼Ð¾Ð¹ Ð¾Ð±Ñ…Ð¾Ð´: ";
     preOrderNonRecursive(root);
     std::cout << std::endl;
 
