@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15) # Проверка версии CMake.
 									
-set(PROJECT_NAME breadth-first_search)				 # имя проекта		 
+set(PROJECT_NAME depth-first_search)				 # имя проекта		 
 project("${PROJECT_NAME}")
 
 
