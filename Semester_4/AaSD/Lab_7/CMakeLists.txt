@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15) # Проверка версии CMake.
 									
-set(PROJECT_NAME minimum_covering_trees)				 # имя проекта		 
+set(PROJECT_NAME minimum_covering_tree_2)				 # имя проекта		 
 project("${PROJECT_NAME}")
 
 

@@ -1,69 +1,90 @@
-﻿ #include <iostream>
-#include <fstream>
-#include <queue>
+﻿#include <iostream>
 #include <vector>
+#include <algorithm>
+#include <fstream>
 
-const int maximum_N = 100; // максимальное количество вершин в графе
+// Алгоритм Краскала
+// В данной реализации алгоритма, где ребра сначала сортируются по весу, а затем обрабатываются по порядку, 
+// сложность сортировки ребер составляет O(E logE), где E - количество ребер. 
+// Затем производится обработка каждого ребра, что занимает O(E)операций. 
+using namespace std;
 
-int n; // количество вершин в графе
-int a[maximum_N][maximum_N]; // матрица смежности
-bool used[maximum_N]; // массив для отслеживания пройденных вершин
-std::vector<int> components[maximum_N]; // массив для хранения вершин в компонентах связности
+// Структура для представления ребра графа
+struct Edge {
+    int src, dest, weight;
+};
 
-void bfs(int v, int comp) // поиск в ширину
-{
-    std::queue<int> q;
-    q.push(v);
-    used[v] = true; // отмечаем вершину как посещенную
-    components[comp].push_back(v); // добавляем вершину в текущую компоненту связности
-    while (!q.empty())
-    {
-        int u = q.front();
-        q.pop();
-        for (int i = 0; i < n; i++)
-        {
-            if (a[u][i] == 1 && !used[i]) // если вершина смежная и не посещена
-            {
-                used[i] = true; // отмечаем её как посещенную
-                components[comp].push_back(i); // добавляем её в текущую компоненту связности
-                q.push(i); // добавляем вершину в очередь для обхода её соседей
+// Функция для сравнения ребер по весу
+bool compareEdges(Edge e1, Edge e2) {
+    return e1.weight < e2.weight;
+}
+
+// Функция для нахождения корня вершины в лесу (сжатие пути)
+int findRoot(vector<int>& parent, int vertex) {
+    if (parent[vertex] == -1) {
+        return vertex;
+    }
+    return parent[vertex] = findRoot(parent, parent[vertex]);
+}
+
+// Функция для выполнения алгоритма Крускала
+void kruskalMST(vector<vector<int>>& graph) {
+    int V = graph.size();
+    vector<Edge> edges;
+
+    // Создаем список ребер из матрицы смежности
+    for (int i = 0; i < V; ++i) {
+        for (int j = i + 1; j < V; ++j) {
+            if (graph[i][j] != 0) {
+                edges.push_back({ i, j, graph[i][j] });
             }
         }
     }
+
+    // Сортируем ребра по весу
+    sort(edges.begin(), edges.end(), compareEdges);
+
+    vector<int> parent(V, -1); // Вектор для хранения родителей вершин
+
+    vector<Edge> result; // Вектор для хранения ребер минимального покрывающего дерева
+    int edgeCount = 0;
+    int i = 0;
+
+    // Применяем алгоритм Крускала
+    while (edgeCount < V - 1 && i < edges.size()) {
+        Edge nextEdge = edges[i++];
+        int rootSrc = findRoot(parent, nextEdge.src);
+        int rootDest = findRoot(parent, nextEdge.dest);
+
+        // Проверяем, не принадлежат ли вершины одному дереву
+        if (rootSrc != rootDest) {
+            result.push_back(nextEdge);
+            ++edgeCount;
+            parent[rootSrc] = rootDest; // Объединяем деревья
+        }
+    }
+
+    // Записываем ребра минимального покрывающего дерева в файл
+    ofstream outFile("output.txt");
+    for (const Edge& edge : result) {
+        outFile << edge.src << " " << edge.dest << " WEIGHT: " << edge.weight << endl;
+    }
 }
 
-int main()
-{
-    std::ifstream fin("configuration/input.txt");
-    fin >> n; // считывание количества вершин
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            fin >> a[i][j]; // считывание матрицы смежности
-        }
-    }
-    fin.close();
+int main() {
+    ifstream inFile("configuration/input.txt");
+    int V;
+    inFile >> V;
 
-    int comp = 0; // количество компонент связности
-    for (int i = 0; i < n; i++)
-    {
-        if (!used[i])
-        {
-            bfs(i, comp); // запуск поиска в ширину из не пройденной вершины
-            comp++; // увеличение количества компонент связности
+    // Чтение матрицы смежности из файла
+    vector<vector<int>> graph(V, vector<int>(V));
+    for (int i = 0; i < V; ++i) {
+        for (int j = 0; j < V; ++j) {
+            inFile >> graph[i][j];
         }
     }
-    std::ofstream fout("output.txt");
-    fout << "Количество компонент связности: " << comp << std::endl;
-    for (int i = 0; i < comp; i++)
-    {
-        fout << "Компонента связности " << i + 1 << ": ";
-        for (int vertex : components[i])
-        {
-            fout << vertex << " "; // записываем вершины в компоненте связности
-        }
-        fout << std::endl;
-    }
-    fout.close();
+
+    kruskalMST(graph); // Вызов функции для выполнения алгоритма Крускала
+
+    return 0;
 }
