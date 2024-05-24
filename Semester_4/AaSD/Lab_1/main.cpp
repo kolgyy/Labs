@@ -1,72 +1,108 @@
 ﻿#include <iostream>
 #include <vector>
-#include <algorithm>
-
-// Алгоритм Грэхема имеет сложность O(n) без учета сортировки и O(nlogn) с сортировкой
-
-
-using namespace std;
+#include <stack>
+#include <cmath>
 
 struct Point {
-    int x, y;
+	int x, y;
+	Point(int _x, int _y) : x(_x), y(_y) {};
 };
 
-struct Vector {
-    int x, y;
-    Vector(Point p1, Point p2) { // Конструктор для построения вектора из 2-х точек
-        x = p2.x - p1.x;
-        y = p2.y - p1.y;
-    }
+void sort_Insertion(std::vector<Point>& _arr) {
+	for (int i = 0; i < _arr.size(); i++) {
+		for (int j = i; j > 0 && _arr[j - 1].x > _arr[j].x; j--) {
+			std::swap(_arr[j - 1], _arr[j]);
+		}
+	}
+	for (int i = 0; i < _arr.size() - 1; i++) {
+		if (_arr[i].x == _arr[i + 1].x && _arr[i].y > _arr[i + 1].y)
+			std::swap(_arr[i], _arr[i + 1]);
+	}
+}
+
+double calc_Angle(Point _a, Point _b, Point _c) { //Âûñ÷èòûâàåì óãîë ìåæäó òî÷êàìè
+	double angle_rad;
+
+	double ux = _b.x - _a.x;
+	double uy = _b.y - _a.y;
+	double vx = _c.x - _b.x;
+	double vy = _c.y - _b.y;
+
+	double magnitudeU = sqrt(ux * ux + uy * uy);
+	double magnitudeV = sqrt(vx * vx + vy * vy);
+
+	if (magnitudeU > 0 && magnitudeV > 0) {
+		double dotProduct = ux * vx + uy * vy;
+		double cos_fi = dotProduct / (magnitudeU * magnitudeV);
+		angle_rad = acos(cos_fi);
+	}
+	else
+		angle_rad = 0.0;
+
+	int angle_deg = 180 - angle_rad * 180.0 / 3.1415;
+
+	return angle_deg;
 };
 
-long cross(Vector v1, Vector v2) { // Векторное произведение
-    return v1.x * v2.y - v2.x * v1.y; // Векторное произведение как определитель матрицы
+int orientation(Point p, Point q, Point r) {//îïðåäåëàþ íàïðàâëåíèå âåêòîðà 
+	int pseudo_cross_product = (q.x - p.x) * (r.y - q.y) - (r.x - q.x) * (q.y - p.y);
+
+	if (pseudo_cross_product > 0) {
+		return 1;  //Ïîâîðîò ïðîòèâ ÷àñîâîé ñòðåëêå
+	}
+	else if (pseudo_cross_product < 0) {
+		return -1; // Ïîâîðîò g ÷àñîâîé ñòðåëêå
+	}
+	else {
+		return 0; // Âåêòîðû êîëëèíåàðíû
+	}
 }
 
+void chain(std::stack<Point>& Shell, std::vector<Point>& _arr, int _a, int _b) {
+	int i = 0, angl = 0;
+	for (int j = 0; j < _arr.size(); j++) {
+		int _angl = calc_Angle(_arr[_a], _arr[_b], _arr[j]);
+		if ((orientation(_arr[_a], _arr[_b], _arr[j]) > 0) && _angl > angl) {
+			angl = _angl;
+			i = j;
+		}
+	}
+	if (i != 0) {
+		std::cout << angl << '-' << _arr[i].x << ' ' << _arr[i].y << std::endl;
+		Shell.push(_arr[i]);
+		chain(Shell, _arr, _b, i);
+	}
+};
 
-vector<Point> get_convex_hull(vector<Point> points) {
-    // 1 ШАГ - Поиск опорной точки и сортировка
-    for (int i = 1; i < points.size(); ++i) { // Ищем опорную точку, которая будет самой левой и самой нижней из всех
-        if ((points[i].x < points[0].x) || (points[i].x == points[0].x && points[i].y < points[0].y)) {
-            swap(points[0], points[i]); // Опорную точку помещаем в самое начало вектора
-        }
-    }
-    // Сортировка заключается в том, что первая точка лежит левее, чем вторая. Здесь поможет векторное произведение.
-    sort(points.begin() + 1, points.end(), [&points](Point p1, Point p2)
-        {
-            return cross(Vector(points[0], p1), Vector(points[0], p2)) > 0; // Для этого векторное произведение должно быть больше нуля.
-        });
-    // 2 ШАГ - Пробежаться по точкам и собрать их в вектор.
-    vector<Point> ch = { points[0]};
-    for (int i = 1; i < points.size(); ++i) {
-        // Срезаем ненужные точки
-        while (ch.size() >= 2 && cross(Vector(ch[ch.size() - 2], ch[ch.size() - 1]), Vector(ch[ch.size() - 1], points[i])) < 0) {
-            ch.pop_back();
 
-        }
-        ch.push_back(points[i]);
-    }
-    return ch;
-}
+std::stack<Point> build_Shell(std::vector<Point>& _arr) {
+	std::stack<Point> Shell;
+	Shell.push(_arr[0]);
+	int pos_f = _arr.size() - 1;
+	chain(Shell, _arr, pos_f, 0);
+	return Shell;
+};
+
 
 int main() {
-    setlocale(LC_ALL, "Russian");
-    int n;
-    cout << "Введите количество точек: ";
-    cin >> n;
-    vector<Point> points(n);
-    cout << "Введите координаты точек (x y):" << endl;
-    for (auto &pt : points) {
-        cin >> pt.x >> pt.y;
-    }
-    auto convexHull = get_convex_hull(points);
-    cout << convexHull.size() << endl;
-    for (auto pt : convexHull) {
-        cout << pt.x << ' ' << pt.y << endl;
-    }
+	std::vector<Point> PointArray = { {3,3}, {2,-4}, {0,0}, {4,2}, {6,1}, {2,5}, {7,5}, {10,0}, {0,2} };
+	PointArray = { {0,0}, {0,100}, {100,0}, {50,50}, {8,0}, {4,0}, {7,0}, {0,13}, {12,25} };
+	sort_Insertion(PointArray);
 
-    // Пример 7 точек: (1,1), (2,3), (4, 2), (5, 5), (6, 3), (7, 4), (8, 1)
-    // Вывод 5 точек: (1,1), (8, 1), (7, 4), (5, 5), (2, 3)
+	std::stack<Point> Shell = build_Shell(PointArray);
+	if (Shell.size() == 1) {
+		;
+		Shell.push(PointArray[PointArray.size() - 1]);
+		chain(Shell, PointArray, 0, PointArray.size() - 1);
+	}
 
-    return 0;
+	if (Shell.size() > 1) {
+		std::cout << "Shell created" << std::endl;
+		while (!Shell.empty()) {
+			std::cout << Shell.top().x << ' ' << Shell.top().y << std::endl;
+			Shell.pop();
+		}
+	}
+
+	return 0;
 }
